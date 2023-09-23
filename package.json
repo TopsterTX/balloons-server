@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "module": "index.ts",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "bun build",
+    "dev": "bun --watch ./src/index.ts",
+    "format": "prettier --write ./**/*.{ts,json}",
+    "lint": "eslint --fix ./src/**/*.ts",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    ".src/**/*.ts": ""
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}
