@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Color {
+  id          Int                 @default(autoincrement()) @id
+  name        String
+  icon        String
+  balloons    BalloonsOnColors[]
+}
+
+model Balloon {
+  id          Int                 @default(autoincrement()) @id
+  name        String
+  count       Int
+  price       Int
+  oldPrice    Int?
+  isSale      Boolean?
+  type        BalloonType      
+  colors      BalloonsOnColors[]
+}
+
+model BalloonsOnColors {
+  balloon     Balloon             @relation(fields: [balloonId], references: [id])
+  balloonId   Int
+  color       Color               @relation(fields: [colorId], references: [id])
+  colorId     Int
+  assignedAt  DateTime            @default(now())
+  assignedBy  String
+
+  @@id([colorId, balloonId])
+}
+
+enum BalloonType {
+  Foil
+  Common
+}
