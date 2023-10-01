@@ -13,7 +13,7 @@ import { HttpExceptionFilter } from 'filters/httpException.filter';
 import { BalloonsService } from './balloon.service';
 
 @Controller('balloon')
-@UseFilters(new HttpExceptionFilter())
+@UseFilters(HttpExceptionFilter)
 export class BalloonsController {
   constructor(private readonly balloonService: BalloonsService) {}
 
