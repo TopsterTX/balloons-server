@@ -21,7 +21,8 @@
       "modules/*": ["./src/modules/*"],
       "balloon/*": ["./src/modules/balloon/*"],
       "prisma/*": ["./src/modules/prisma/*"],
-      "filters/*": ["./src/filters/*"]
+      "filters/*": ["./src/filters/*"],
+      "config/*": ["./src/config/*"]
     }
   }
 }
