@@ -18,8 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "balloon/*": ["./src/balloon/*"],
-      "prisma/*": ["./src/prisma/*"]
+      "modules/*": ["./src/modules/*"],
+      "balloon/*": ["./src/modules/balloon/*"],
+      "prisma/*": ["./src/modules/prisma/*"],
+      "filters/*": ["./src/filters/*"]
     }
   }
 }

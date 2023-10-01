@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseFilters,
 } from '@nestjs/common';
 import { Balloon, Prisma } from '@prisma/client';
+import { HttpExceptionFilter } from 'filters/httpException.filter';
 import { BalloonsService } from './balloon.service';
 
 @Controller('balloon')
+@UseFilters(new HttpExceptionFilter())
 export class BalloonsController {
   constructor(private readonly balloonService: BalloonsService) {}
 
