@@ -81,7 +81,7 @@ export class BalloonsService {
 
   async update(
     id: number,
-    data: Prisma.BalloonCreateInput,
+    data: Prisma.BalloonUpdateInput,
   ): Promise<Balloon | string> {
     try {
       const currentBalloon = await this.prisma.balloon.findUnique({
