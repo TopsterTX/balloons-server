@@ -3,15 +3,16 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 3001;
+  const HOST = process.env.HOST || 'localhost';
+  const ORIGIN = process.env.ORIGIN || 'balloons-test.ru';
 
   const app = await NestFactory.create(AppModule);
-
-  app.setGlobalPrefix('api');
   app.enableCors({
-    allowedHeaders: ['content-type'],
-    origin: 'http://localhost:3000',
-    credentials: true,
+    origin: ORIGIN,
   });
-  await app.listen(PORT);
+  app.setGlobalPrefix('api');
+  await app.listen(PORT, HOST, () =>
+    console.warn(`Server started on the ${HOST}:${PORT}`),
+  );
 }
 bootstrap();
