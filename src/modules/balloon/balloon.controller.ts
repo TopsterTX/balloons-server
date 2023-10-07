@@ -17,25 +17,25 @@ import { BalloonsService } from './balloon.service';
 export class BalloonsController {
   constructor(private readonly balloonService: BalloonsService) {}
 
-  @Get()
+  @Get() // GET http://localhost/api/balloon
   findAll(): Promise<Balloon[]> {
     return this.balloonService.findAll();
   }
 
-  @Get(':id')
+  @Get(':id') // GET http://localhost/api/balloon/2
   findById(@Param('id') id: string): Promise<Balloon | string> {
     return this.balloonService.findByParam(Number(id));
   }
 
-  @Post()
+  @Post() // POST http://localhost/api/balloon {}
   create(@Body() data: Prisma.BalloonCreateInput): Promise<Balloon | string> {
     return this.balloonService.create(data);
   }
 
-  @Put(':id')
+  @Put(':id') // PUT http://localhost/api/balloon/2 {}
   update(
     @Param('id') id: string,
-    @Body() data: Prisma.BalloonCreateInput,
+    @Body() data: Prisma.BalloonUpdateInput,
   ): Promise<Balloon | string> {
     return this.balloonService.update(Number(id), data);
   }
