@@ -1,3 +1,4 @@
+import 'winston-daily-rotate-file';
 import { transports, format } from 'winston';
 
 export const getWinstonConfig = () => {
@@ -6,21 +7,30 @@ export const getWinstonConfig = () => {
     format.ms(),
     format.timestamp(),
     format.json(),
+    format.colorize(),
+    format.prettyPrint(),
   );
 
-  const now = new Date();
-  const date = new Intl.DateTimeFormat('ru-RU').format(now);
+  const options = {
+    dirname: 'logs',
+    datePattern: 'DD-MM-YYYY',
+    maxFiles: '10d',
+    format: consoleFormat,
+  };
 
   return {
     level: isDebugMode ? 'debug' : 'info',
     transports: [
       new transports.Console({ format: consoleFormat }),
-      new transports.File({
+      new transports.DailyRotateFile({
+        level: 'error',
+        filename: '%DATE%-error.log',
+        ...options,
+      }),
+      new transports.DailyRotateFile({
         level: 'info',
-        dirname: 'logs',
-        filename: `${date}.json`,
-        maxFiles: 5,
-        format: consoleFormat,
+        filename: '%DATE%-info.log',
+        ...options,
       }),
     ],
   };
