@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { Balloon, Prisma } from '@prisma/client';
 import { HttpExceptionFilter } from 'filters/httpException.filter';
-import { BalloonsService } from './balloon.service';
+import { BalloonsService } from './balloons.service';
 
-@Controller('balloon')
+@Controller('balloons')
 @UseFilters(HttpExceptionFilter)
 export class BalloonsController {
   constructor(private readonly balloonService: BalloonsService) {}

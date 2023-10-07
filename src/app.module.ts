@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
-import { BalloonsModule } from 'balloon/balloon.module';
+import { BalloonsModule } from 'balloons/balloons.module';
+import { LoggerMiddleware, ReqIdMiddleware } from 'middlewares/index';
 import { getWinstonConfig } from 'config/index';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,4 +11,8 @@ import { AppService } from './app.service';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ReqIdMiddleware, LoggerMiddleware).forRoutes('*');
+  }
+}

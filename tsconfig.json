@@ -19,10 +19,11 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "modules/*": ["./src/modules/*"],
-      "balloon/*": ["./src/modules/balloon/*"],
+      "balloons/*": ["src/modules/balloons/*"],
       "prisma/*": ["./src/modules/prisma/*"],
       "filters/*": ["./src/filters/*"],
-      "config/*": ["./src/config/*"]
+      "config/*": ["./src/config/*"],
+      "middlewares/*": ["./src/middlewares/*"]
     }
   }
 }
