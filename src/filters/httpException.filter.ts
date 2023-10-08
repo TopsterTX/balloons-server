@@ -8,6 +8,7 @@ import {
 import { Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { BackendResponse } from 'types/index';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -41,12 +42,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
       })}`,
     );
 
-    response.status(status).json({
+    const errorObject = {
       status,
       path,
       timestamp,
-      message: cause.name || message.error || null,
+      message: cause?.name || message?.error || null,
       stack: isDev ? stack : null,
-    });
+    };
+
+    const responseBody: BackendResponse<null, typeof errorObject> = {
+      success: false,
+      error: errorObject,
+    };
+
+    response.status(status).json(responseBody);
   }
 }

@@ -6,42 +6,50 @@ import {
   Param,
   Post,
   Put,
-  UseFilters,
+  UseGuards,
 } from '@nestjs/common';
-import { Balloon, Prisma } from '@prisma/client';
-import { HttpExceptionFilter } from 'filters/httpException.filter';
+import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/guards';
 import { BalloonsService } from './balloons.service';
 
 @Controller('balloons')
-@UseFilters(HttpExceptionFilter)
 export class BalloonsController {
   constructor(private readonly balloonService: BalloonsService) {}
 
-  @Get() // GET http://localhost/api/balloon
-  findAll(): Promise<Balloon[]> {
+  @Get()
+  findAll(): ReturnType<typeof this.balloonService.findAll> {
     return this.balloonService.findAll();
   }
 
-  @Get(':id') // GET http://localhost/api/balloon/2
-  findById(@Param('id') id: string): Promise<Balloon | string> {
-    return this.balloonService.findByParam(Number(id));
+  @Get(':id')
+  findById(
+    @Param('id') id: string,
+  ): ReturnType<typeof this.balloonService.findByParam> {
+    return this.balloonService.findByParam(id);
   }
 
-  @Post() // POST http://localhost/api/balloon {}
-  create(@Body() data: Prisma.BalloonCreateInput): Promise<Balloon | string> {
+  @UseGuards(AuthGuard)
+  @Post()
+  create(
+    @Body() data: Prisma.BalloonCreateInput,
+  ): ReturnType<typeof this.balloonService.create> {
     return this.balloonService.create(data);
   }
 
-  @Put(':id') // PUT http://localhost/api/balloon/2 {}
+  @UseGuards(AuthGuard)
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() data: Prisma.BalloonUpdateInput,
-  ): Promise<Balloon | string> {
-    return this.balloonService.update(Number(id), data);
+  ): ReturnType<typeof this.balloonService.update> {
+    return this.balloonService.update(id, data);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  delete(@Param('id') id: string): Promise<Balloon | string> {
-    return this.balloonService.remove(Number(id));
+  delete(
+    @Param('id') id: string,
+  ): ReturnType<typeof this.balloonService.remove> {
+    return this.balloonService.remove(id);
   }
 }

@@ -5,9 +5,14 @@ import { LoggerMiddleware, ReqIdMiddleware } from 'middlewares/index';
 import { getWinstonConfig } from 'config/index';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
-  imports: [BalloonsModule, WinstonModule.forRoot(getWinstonConfig())],
+  imports: [
+    BalloonsModule,
+    WinstonModule.forRoot(getWinstonConfig()),
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

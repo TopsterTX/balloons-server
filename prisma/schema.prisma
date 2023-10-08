@@ -10,15 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          String              @default(uuid()) @id
+  username    String              @unique
+  password    String
+  role        Role
+}
+
 model Color {
-  id          Int                 @default(autoincrement()) @id
+  id          String              @default(uuid()) @id
   name        String
-  icon        String
   balloons    BalloonsOnColors[]
 }
 
 model Balloon {
-  id          Int                 @default(autoincrement()) @id
+  id          String              @default(uuid()) @id
   name        String
   count       Int
   price       Int
@@ -26,13 +32,14 @@ model Balloon {
   isSale      Boolean?
   type        BalloonType      
   colors      BalloonsOnColors[]
+  imageSrc    String?
 }
 
 model BalloonsOnColors {
   balloon     Balloon             @relation(fields: [balloonId], references: [id])
-  balloonId   Int
+  balloonId   String
   color       Color               @relation(fields: [colorId], references: [id])
-  colorId     Int
+  colorId     String
   assignedAt  DateTime            @default(now())
   assignedBy  String
 
@@ -42,4 +49,9 @@ model BalloonsOnColors {
 enum BalloonType {
   Foil
   Common
+}
+
+enum Role {
+  User
+  Admin
 }

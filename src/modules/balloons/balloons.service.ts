@@ -1,19 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BackendResponse } from 'types/common';
 import { Balloon, Prisma } from '@prisma/client';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'modules/prisma/prisma.service';
 
 @Injectable()
 export class BalloonsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<Balloon[]> {
-    try {
-      const balloons = await this.prisma.balloon.findMany();
+  async findAll(): Promise<BackendResponse<Balloon[]>> {
+    const balloons = await this.prisma.balloon.findMany();
 
-      if (balloons.length) {
-        return balloons;
-      }
-
+    if (!balloons.length) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -21,28 +18,17 @@ export class BalloonsService {
         },
         HttpStatus.BAD_REQUEST,
       );
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: 'Error occured when find balloons',
-        },
-        HttpStatus.BAD_REQUEST,
-        { cause: error },
-      );
     }
+
+    return { success: true, data: balloons };
   }
 
-  async findByParam(id: number): Promise<Balloon> {
-    try {
-      const balloon = await this.prisma.balloon.findUnique({
-        where: { id },
-      });
+  async findByParam(id: string): Promise<BackendResponse<Balloon>> {
+    const balloon = await this.prisma.balloon.findUnique({
+      where: { id },
+    });
 
-      if (balloon) {
-        return balloon;
-      }
-
+    if (!balloon) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -50,23 +36,23 @@ export class BalloonsService {
         },
         HttpStatus.BAD_REQUEST,
       );
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: 'Error occured when find balloon',
-        },
-        HttpStatus.BAD_REQUEST,
-        { cause: error },
-      );
     }
+
+    return { success: true, data: balloon };
   }
 
-  async create(data: Prisma.BalloonCreateInput): Promise<Balloon | string> {
+  async create(
+    data: Prisma.BalloonCreateInput,
+  ): Promise<BackendResponse<Balloon>> {
     try {
-      return await this.prisma.balloon.create({
+      const balloon = await this.prisma.balloon.create({
         data,
       });
+
+      return {
+        success: true,
+        data: balloon,
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -80,64 +66,53 @@ export class BalloonsService {
   }
 
   async update(
-    id: number,
+    id: string,
     data: Prisma.BalloonUpdateInput,
-  ): Promise<Balloon | string> {
-    try {
-      const currentBalloon = await this.prisma.balloon.findUnique({
-        where: { id },
-      });
+  ): Promise<BackendResponse<Balloon>> {
+    const currentBalloon = await this.prisma.balloon.findUnique({
+      where: { id },
+    });
 
-      if (!currentBalloon)
-        throw new HttpException(
-          {
-            status: HttpStatus.BAD_REQUEST,
-            error: 'Balloon not found',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
-
-      return await this.prisma.balloon.update({
-        data,
-        where: { id },
-      });
-    } catch (error) {
+    if (!currentBalloon)
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: 'Error occured when update balloon',
+          error: 'Balloon not found',
         },
         HttpStatus.BAD_REQUEST,
-        { cause: error },
       );
-    }
+
+    const updatedBalloon = await this.prisma.balloon.update({
+      data,
+      where: { id },
+    });
+
+    return {
+      success: true,
+      data: updatedBalloon,
+    };
   }
 
-  async remove(id: number): Promise<Balloon | string> {
-    try {
-      const currentBalloon = await this.prisma.balloon.findUnique({
-        where: { id },
-      });
-      if (!currentBalloon)
-        throw new HttpException(
-          {
-            status: HttpStatus.BAD_REQUEST,
-            error: 'Balloon not found',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
-      return await this.prisma.balloon.delete({
-        where: { id },
-      });
-    } catch (error) {
+  async remove(id: string): Promise<BackendResponse<Balloon>> {
+    const currentBalloon = await this.prisma.balloon.findUnique({
+      where: { id },
+    });
+    if (!currentBalloon)
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: 'Error occured when remove balloon',
+          error: 'Balloon not found',
         },
         HttpStatus.BAD_REQUEST,
-        { cause: error },
       );
-    }
+
+    const deletedBalloon = await this.prisma.balloon.delete({
+      where: { id },
+    });
+
+    return {
+      success: true,
+      data: deletedBalloon,
+    };
   }
 }

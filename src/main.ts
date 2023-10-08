@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { HttpExceptionFilter } from 'filters/index';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -13,6 +14,9 @@ async function bootstrap() {
   app.enableCors({
     origin: ORIGIN,
   });
+  app.useGlobalFilters(
+    new HttpExceptionFilter(app.get(WINSTON_MODULE_NEST_PROVIDER)),
+  );
   app.setGlobalPrefix('api');
 
   await app.listen(PORT, HOST, () =>

@@ -23,7 +23,9 @@
       "prisma/*": ["./src/modules/prisma/*"],
       "filters/*": ["./src/filters/*"],
       "config/*": ["./src/config/*"],
-      "middlewares/*": ["./src/middlewares/*"]
+      "middlewares/*": ["./src/middlewares/*"],
+      "guards/*": ["./src/guards/*"],
+      "types/*": ["./src/types/*"]
     }
   }
 }
