@@ -36,7 +36,7 @@ export class BalloonsService {
   async findByParam(id: number): Promise<Balloon> {
     try {
       const balloon = await this.prisma.balloon.findUnique({
-        where: { id },
+        where: { id: String(id) },
       });
 
       if (balloon) {
@@ -85,7 +85,7 @@ export class BalloonsService {
   ): Promise<Balloon | string> {
     try {
       const currentBalloon = await this.prisma.balloon.findUnique({
-        where: { id },
+        where: { id: String(id) },
       });
 
       if (!currentBalloon)
@@ -99,7 +99,7 @@ export class BalloonsService {
 
       return await this.prisma.balloon.update({
         data,
-        where: { id },
+        where: { id: String(id) },
       });
     } catch (error) {
       throw new HttpException(
@@ -116,7 +116,7 @@ export class BalloonsService {
   async remove(id: number): Promise<Balloon | string> {
     try {
       const currentBalloon = await this.prisma.balloon.findUnique({
-        where: { id },
+        where: { id: String(id) },
       });
       if (!currentBalloon)
         throw new HttpException(
@@ -127,7 +127,7 @@ export class BalloonsService {
           HttpStatus.BAD_REQUEST,
         );
       return await this.prisma.balloon.delete({
-        where: { id },
+        where: { id: String(id) },
       });
     } catch (error) {
       throw new HttpException(
